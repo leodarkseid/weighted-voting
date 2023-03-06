@@ -27,12 +27,9 @@ console.log("Deploying contract ...");
 await contract.deployed();
 const deployTransactionReceipt = await contract.deployTransaction.wait();
 console.log(`
-    Contract address:,
-    ${contract.address},
-    Deployer :,
-    ${signer.address},
-    Block number :,
-    ${deployTransactionReceipt.blockNumber},
+    Contract address:${contract.address},
+    Deployer :${signer.address},
+    Block number :${deployTransactionReceipt.blockNumber},
     "\n"
   `);
 }
