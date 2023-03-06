@@ -26,15 +26,15 @@ const contract = await contractFactory.deploy();
 console.log("Deploying contract ...");
 await contract.deployed();
 const deployTransactionReceipt = await contract.deployTransaction.wait();
-console.log(
-    "Contract address:",
-    contract.address,
-    "deployer",
-    signer.address,
-    "block number",
-    deployTransactionReceipt.blockNumber,
+console.log(`
+    Contract address:,
+    ${contract.address},
+    Deployer :,
+    ${signer.address},
+    Block number :,
+    ${deployTransactionReceipt.blockNumber},
     "\n"
-  );
+  `);
 }
 main().catch((error) => {
     console.error(error);
