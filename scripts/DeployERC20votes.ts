@@ -2,6 +2,8 @@ import { ethers } from "hardhat";
 import { MyToken__factory } from "../typechain-types";
 import * as dotenv from "dotenv";
 
+dotenv.config();
+
 async function main() {
     const provider = new ethers.providers.AlchemyProvider(
         "goerli",
