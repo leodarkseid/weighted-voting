@@ -30,7 +30,7 @@ async function main() {
     const contract = await contractFactory.attach(tokenAddress);
     console.log("Successfully attached");
 
-    if (args.length === 3) {
+    //To Self Delegate just pass in your own address as argument
         
     
         //Check voting power Before Delgating
@@ -41,19 +41,7 @@ async function main() {
         Signer Voting Power: ${tokenBalanceAccount}
         `);
 
-        //Set the self-delegate
-        const delegateTxAccount = await contract.delegate(signer.address);
-        const delegateTxReceiptAccount = await delegateTxAccount.wait();
-        console.log(`
-            Delegatee: ${signer.address},
-            Block number: ${delegateTxReceiptAccount.blockNumber}
-          `);
-        //Check Voting Power of signer After Delegating
-        const votePowerAccountAfterDelegate = await contract.getVotes(signer.address);
-        console.log(`
-        New voting power: ${ethers.utils.formatEther(votePowerAccountAfterDelegate)}
-        `)
-    } else {
+        
         const delegateAddress = args[3];
 
         const tokenBalanceDelegateBefore = await contract.balanceOf(delegateAddress);
@@ -68,11 +56,6 @@ async function main() {
       Delegate voting power:",
       ${ethers.utils.formatEther(votePowerDelegateBefore)}`);
         
-        console.log(
-          "The signer has a balance of",
-          ethers.utils.formatEther(tokenBalanceAccount),
-          "vote tokens!"
-        );
 
         const delegateTxDelegate = await contract.delegate(delegateAddress);
         const delegateTxReceiptDelegate = await delegateTxDelegate.wait();
@@ -92,7 +75,7 @@ async function main() {
         Balance:${ethers.utils.formatEther(votePowerDelegateAfter)} "
         `);
 
-}
+}}
 main().catch((error) => {
     console.error(error);
     process.exitCode = 1;
