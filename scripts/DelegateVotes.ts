@@ -10,7 +10,7 @@ async function main() {
     const args = process.argv;
     const tokenAddress = args[2];
   
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
       process.env.ALCHEMY_API_KEY
     );

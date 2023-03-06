@@ -19,9 +19,9 @@ async function main() {
     const proposals = args.slice(4);
     if (proposals.length <= 0) throw new Error("Missing proposals");
   
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_API_KEY
+      process.env.INFURA_API_KEY
     );
     const privateKey = process.env.PRIVATE_KEY;
     if (!privateKey || privateKey.length <= 0) {
@@ -39,6 +39,8 @@ async function main() {
     await contractDeploy.deployed();
     const deployedTransactionReceipt = await contractDeploy.deployTransaction.wait();
     console.log(`
+    Contract Deployment Sucessful !!
+    
     Block Number : ${deployedTransactionReceipt.blockNumber}, 
     Contract Address: ${deployedTransactionReceipt.blockNumber},
     Courtesy of : ${signer.address}

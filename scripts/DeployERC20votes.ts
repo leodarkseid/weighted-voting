@@ -5,9 +5,9 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 async function main() {
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
         "goerli",
-        process.env.ALCHEMY_API_KEY
+        process.env.INFURA_API_KEY
     );
     const privateKey = process.env.PRIVATE_KEY;
     if (!privateKey || privateKey.length <= 0){
