@@ -42,7 +42,7 @@ async function main() {
     Contract Deployment Sucessful !!
     
     Block Number : ${deployedTransactionReceipt.blockNumber}, 
-    Contract Address: ${deployedTransactionReceipt.blockNumber},
+    Contract Address: ${deployedTransactionReceipt.contractAddress},
     Courtesy of : ${signer.address}
     `)
 }

@@ -9,10 +9,11 @@ dotenv.config();
 async function main() {
     const args = process.argv;
     const tokenAddress = args[2];
-  
+    const delegateeAddress = args[3];
+
     const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_API_KEY
+      process.env.INFURA_API_KEY
     );
     const privateKey = process.env.PRIVATE_KEY;
     if (!privateKey || privateKey.length <= 0) {
@@ -33,49 +34,55 @@ async function main() {
     //To Self Delegate just pass in your own address as argument
         
     
-        //Check voting power Before Delgating
-        const votePowerAccount = await contract.getVotes(signer.address);
-        const tokenBalanceAccount = await contract.balanceOf(signer.address);
+        //Check voting power and token Balance Before Delgating
+        const votePowerAccountBefore = await contract.getVotes(signer.address);
+        const tokenBalanceAccountBefore = await contract.balanceOf(signer.address);
         console.log(`
-        Voting power: ${ethers.utils.formatEther(votePowerAccount)},
-        Signer Voting Power: ${tokenBalanceAccount}
+        Signer Voting power before Delegation: ${ethers.utils.formatEther(votePowerAccountBefore)},
+        Signer Token Balance before Delegation: ${tokenBalanceAccountBefore}
         `);
 
         
-        const delegateAddress = args[3];
-
-        const tokenBalanceDelegateBefore = await contract.balanceOf(delegateAddress);
-        
-          console.log(`
-          Delegatee Vote token Balance: ${ethers.utils.formatEther(tokenBalanceDelegateBefore)},
-          "vote tokens!"
-        `);
-
-        const votePowerDelegateBefore = await contract.getVotes(delegateAddress);
+        //Check Delegatee Voting power and balance before delegating
+        const tokenBalanceDelegateBefore = await contract.balanceOf(delegateeAddress);
+        const delegateeVotePowerBefore = await contract.getVotes(delegateeAddress);
         console.log(`
-      Delegate voting power:",
-      ${ethers.utils.formatEther(votePowerDelegateBefore)}`);
-        
+          Delegatee Vote token Balance before Delegation: ${ethers.utils.formatEther(tokenBalanceDelegateBefore)},
+          Vote tokens
+        `);
+        console.log(`Delegatee Vote Power before Delegation: ${ethers.utils.formatEther(delegateeVotePowerBefore)},
+        vote tokens`)
 
-        const delegateTxDelegate = await contract.delegate(delegateAddress);
+
+        // Delegate Voting Powers to Delegatee
+
+        const delegateTxDelegate = await contract.delegate(delegateeAddress);
+        console.log("Delegating ...")
         const delegateTxReceiptDelegate = await delegateTxDelegate.wait();
 
+        // check  Delegate voting Powers after delegation
+        const tokenBalanceSignerAfter = await contract.balanceOf(signer.address);
+        const votePowerSignerAfter = await contract.getVotes(signer.address);
+        const tokenBalanceDelegateAfter = await contract.balanceOf(delegateeAddress);
+        const votePowerDelegateAfter = await contract.getVotes(delegateeAddress);
         console.log(`
-            Delegatee:${delegateAddress},
-            Block number: ${delegateTxReceiptDelegate.blockNumber},
-          `);
-        const tokenBalanceDelegateAfter = await contract.balanceOf(delegateAddress);
-        console.log(`
-        Delegate: ${delegateAddress},
-        Balance:${ethers.utils.formatEther(tokenBalanceDelegateAfter)} vote tokens"
-        `);
-        const votePowerDelegateAfter = await contract.balanceOf(delegateAddress);
-        console.log(`
-        Delegate: ${delegateAddress},
-        Balance:${ethers.utils.formatEther(votePowerDelegateAfter)} "
-        `);
+            Successful !!!
 
-}}
+            Signer(Delegator) Address:${signer.address}
+            Signer Token Balance After Delegation :${ethers.utils.formatEther(tokenBalanceSignerAfter)}
+            Signer Token Voting Power After Delegation : ${ethers.utils.formatEther(votePowerSignerAfter)}
+
+            Delegatee Address:${delegateeAddress},
+            Block number: ${delegateTxReceiptDelegate.blockNumber},
+
+            Delegatee Token Balance After Delegation: ${ethers.utils.formatEther(tokenBalanceDelegateAfter)},
+            Delegatee Voting Power after Delegation: ${ethers.utils.formatEther(votePowerDelegateAfter)},
+    
+          `);
+        
+        
+
+}
 main().catch((error) => {
     console.error(error);
     process.exitCode = 1;

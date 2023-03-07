@@ -8,12 +8,12 @@ dotenv.config();
 async function main() {
     const args = process.argv;
     const ballotAddress = args[2];
-    const proposal = args[3];
-    const amount = ethers.utils.parseEther(args[4]);
+    const proposal = parseInt(args[3]);
+    const amount = parseInt(args[4]);
   
-    const provider = new ethers.providers.AlchemyProvider(
+    const provider = new ethers.providers.InfuraProvider(
       "goerli",
-      process.env.ALCHEMY_API_KEY
+      process.env.INFURA_API_KEY
     );
     const privateKey = process.env.PRIVATE_KEY;
     if (!privateKey || privateKey.length <= 0) {
@@ -29,7 +29,7 @@ async function main() {
 
     //Attach an address to the contract
   const contract = await contractFactory.attach(ballotAddress);
-  console.log("Successful");
+  console.log("Successful attached Ballot Address");
 
   //Vote on proposal
   const voteTx = await contract.connect(signer).vote(proposal, amount);
