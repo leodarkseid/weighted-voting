@@ -25,20 +25,28 @@ async function main() {
   const ballotFactory = new Ballot__factory(signer);
 
   //Attach an address to the contract
-  console.log(`Attaching to ballot contract at address ${contractAddress} ...`);
+  console.log(`Attaching....... ${contractAddress}`);
   const deployedContract = await ballotFactory.attach(contractAddress);
-  console.log("Successfully attached");
+  console.log("Successfully Attached Contract");
 
-  const currentBlock = await provider.getBlockNumber();
-  console.log("Current block number: ", currentBlock);
+  //Get Block No
+  const getBlock = await provider.getBlockNumber();
+  console.log("Loading !!!");
 
-  //Call the winningProposal function for show the winner
+  //winning Proposal 
   const winner = await deployedContract.winningProposal();
-  console.log("The Winner at block", currentBlock, "is: " + winner);
 
   //Call the winnerName function for show the winner name
   const winnerName = await deployedContract.winnerName();
-  console.log("The Winner Name at block", currentBlock, "is: " + winnerName);
+  
+  console.log(`
+  Loading Succesful !!!
+
+
+  Current Block Number: ${getBlock},
+  Winning Proposal: ${winner},
+  Winning Proposal Name: ${winnerName}
+  `)
 }
 
 main().catch((error) => {
